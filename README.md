@@ -15,6 +15,67 @@ You’ll learn:
 
 ---
 
+## Interactive Learning Module
+
+This repository is a **fully interactive bootcamp** with auto-checked exercises, quizzes, progress tracking, and project milestones.
+
+### Quick Start
+
+```bash
+# 1. Clone and enter the repo
+git clone https://github.com/Tormento416/28-day-python-bootcamp.git
+cd 28-day-python-bootcamp
+
+# 2. Set up the environment (one command)
+make setup
+# OR manually:
+python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+
+# 3. Run ALL exercise tests
+make test
+# OR: python3 -m pytest
+
+# 4. Run tests for a specific phase
+make test-day D=phase1_core
+make test-day D=phase2_web
+make test-day D=phase3_project
+```
+
+### How the exercises work
+
+1. Open an exercise file in `exercises/` (e.g., `exercises/phase1_core/exercise_day01_strings.py`).
+2. Replace every `pass` with your code.
+3. Run the matching tests — green ✅ means correct, red ❌ shows a helpful hint.
+4. Move to the next exercise when all tests pass.
+
+### Learning resources
+
+| Resource | Description |
+|----------|-------------|
+| [`progress.md`](progress.md) | 28-day checklist — track daily completion |
+| [`quizzes/quiz_day07.md`](quizzes/quiz_day07.md) | Day 7 checkpoint quiz |
+| [`quizzes/quiz_day14.md`](quizzes/quiz_day14.md) | Day 14 checkpoint quiz |
+| [`quizzes/quiz_day21.md`](quizzes/quiz_day21.md) | Day 21 checkpoint quiz |
+| [`quizzes/quiz_day28.md`](quizzes/quiz_day28.md) | Day 28 final quiz |
+| [`docs/milestones.md`](docs/milestones.md) | Final project milestones with acceptance criteria |
+| [`docs/troubleshooting.md`](docs/troubleshooting.md) | Fix common beginner errors |
+| [`docs/capstone_rubric.md`](docs/capstone_rubric.md) | Self-grading rubric for the final project |
+
+### Exercise map
+
+| Phase | Days | Exercise folder |
+|-------|------|-----------------|
+| Core Python | 1–14 | `exercises/phase1_core/` |
+| Web Fundamentals | 15–21 | `exercises/phase2_web/` |
+| Final Project | 22–28 | `exercises/phase3_project/` |
+
+### Codespaces (zero-setup)
+
+Click the green **Code** button on GitHub → **Codespaces** → **Create codespace on main**.  
+Python, VS Code, and all dependencies are configured automatically via `.devcontainer/devcontainer.json`.
+
+---
+
 ## Day 0 (Optional): GitHub Codespaces as Linux
 
 If you use GitHub, you can treat Codespaces as a Linux dev box. [web:40]
@@ -72,6 +133,14 @@ python3 day1_hello.py
 
 - Change the message to print two lines.
 - Create `robot.py` that prints a fun “robot” message.
+
+> **🛑 Stop & Try — Day 1**
+> Before reading Day 2, open the terminal and complete this:
+> 1. Write a Python script that prints your name and your favourite programming language on two separate lines.
+> 2. Run it: `python3 yourscript.py`
+> 3. Then run the Day 1 tests: `python3 -m pytest exercises/phase1_core/test_day01_strings.py -v`
+>
+> Don't move on until at least one test passes.
 
 ### Optional: Windows + WSL + Ubuntu
 
@@ -237,6 +306,12 @@ for i in range(1, 6):
 - Print numbers from 1 to 10.
 - Print only even numbers from 1 to 20 using `if i % 2 == 0`.
 
+> **🛑 Stop & Try — Day 7 (Quiz Checkpoint)**
+> 1. Complete the loop exercises in `exercises/phase1_core/exercise_day07_loops.py`.
+> 2. Run: `python3 -m pytest exercises/phase1_core/test_day07_loops.py -v`
+> 3. Try the [Day 7 Quiz](quizzes/quiz_day07.md) — reveal answers only after you've guessed.
+> 4. Mark Day 7 as done in [`progress.md`](progress.md).
+
 ---
 
 ## Day 8 – Lists
@@ -400,6 +475,13 @@ print("Wrote to output.txt")
 
 - Append lines using mode `"a"`.
 - Log user input to a file.
+
+> **🛑 Stop & Try — Day 14 (Quiz Checkpoint)**
+> 1. Complete `exercises/phase1_core/exercise_day12_errors.py`.
+> 2. Run: `python3 -m pytest exercises/phase1_core/ -v`
+> 3. Try the [Day 14 Quiz](quizzes/quiz_day14.md).
+> 4. Mark Day 14 as done in [`progress.md`](progress.md).
+> 5. Review the [project milestones](docs/milestones.md) so you know what's coming.
 
 ---
 
@@ -584,6 +666,13 @@ if self.path == "/weather":
     self.wfile.write(body)
 ```
 
+> **🛑 Stop & Try — Day 21 (Quiz Checkpoint)**
+> 1. Complete `exercises/phase2_web/exercise_day18_backend.py`.
+> 2. Run: `python3 -m pytest exercises/phase2_web/ -v`
+> 3. Try the [Day 21 Quiz](quizzes/quiz_day21.md).
+> 4. Mark Day 21 as done in [`progress.md`](progress.md).
+> 5. Check [Milestone 1](docs/milestones.md) acceptance criteria before starting the final project.
+
 ---
 
 ## Day 22 – Project Skeleton: `frontend/` and `backend/`
@@ -743,6 +832,16 @@ Create `README.md`:
 - List endpoints (`/hello`, `/info`, `/weather`).
 
 If using Codespaces, verify everything runs inside the Codespace environment as well. [web:31][web:39][web:40]
+
+> **🛑 Stop & Try — Day 28 (Final Checkpoint)**
+> 1. Complete `exercises/phase3_project/backend/server.py`.
+> 2. Run all tests: `python3 -m pytest`
+> 3. Take the [Day 28 Quiz](quizzes/quiz_day28.md).
+> 4. Check off all items in [`docs/milestones.md`](docs/milestones.md).
+> 5. Fill in the [Capstone Rubric](docs/capstone_rubric.md) and score yourself.
+> 6. Mark all remaining days as done in [`progress.md`](progress.md).
+>
+> **Congratulations on completing the 28-Day Python Bootcamp!** 🐍🎉
 
 ---
 
