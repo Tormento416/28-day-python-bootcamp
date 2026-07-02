@@ -246,7 +246,7 @@ Create `day8_lists.py`:
 ```python
 fruits = ["apple", "banana", "cherry"]
 
-print("First fruit:", fruits)
+print("First fruit:", fruits[0])
 
 for fruit in fruits:
     print("I like", fruit)
