@@ -829,7 +829,7 @@ import pandas as pd
 import sqlite3
 
 # Extract
-df = pd.read_csv("sales_raw.csv")
+df = pd.read_csv("sales.csv")
 
 # Transform
 df = df.dropna()
