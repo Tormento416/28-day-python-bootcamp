@@ -1,3 +1,23 @@
-export function QuestDetail({ quest, progress }: { quest: any; progress: any }) {
-  return <div className="rounded-3xl border border-white/10 bg-white/5 p-6"><p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Day {quest.day_number}</p><h1 className="mt-3 text-3xl font-bold">{quest.title}</h1><p className="mt-2 text-slate-300">{quest.description}</p><div className="mt-6 flex flex-wrap gap-3"><span className="rounded-full bg-white/10 px-4 py-2 text-sm">Tier: {quest.tier}</span><span className="rounded-full bg-white/10 px-4 py-2 text-sm">XP: {quest.xp_value}</span><span className="rounded-full bg-white/10 px-4 py-2 text-sm">Status: {progress?.status ?? 'not_started'}</span></div></div>;
+export function QuestDetail({
+  quest,
+  progress,
+}: {
+  quest: any;
+  progress: any;
+}) {
+  return (
+    <div className="rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-cyan-400/10 to-white/5 p-6">
+      <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Day {quest.day_number}</p>
+      <h1 className="mt-3 text-3xl font-bold">{quest.title}</h1>
+      <p className="mt-2 text-slate-300">{quest.description}</p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <span className="rounded-full bg-white/10 px-4 py-2 text-sm">Tier: {quest.tier}</span>
+        <span className="rounded-full bg-white/10 px-4 py-2 text-sm">XP: {quest.xp_value}</span>
+        <span className="rounded-full bg-white/10 px-4 py-2 text-sm">Status: {progress?.status ?? "not_started"}</span>
+      </div>
+      <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
+        This is a game: complete the quest, earn XP, and move to the next stage.
+      </div>
+    </div>
+  );
 }

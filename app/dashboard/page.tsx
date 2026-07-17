@@ -8,11 +8,11 @@ export default async function Dashboard() {
 
   const { data: quests } = await supabase.from('quests').select('id,day_number,xp_value,title,description,tier').order('day_number');
   const { data: completedRows } = await supabase.from('user_quests').select('quest_id').eq('user_id', user.id).eq('status','completed');
-  const fallbackQuests = Array.from({ length: 28 }, (_, i) => ({ id: `fallback-${i+1}`, day_number: i+1, xp_value: 50, title: `Day ${i+1}`, description: 'Quest data will appear after seeding the database.', tier: 'beginner' }));
+  const fallbackQuests = Array.from({ length: 28 }, (_, i) => ({ id: `fallback-${i+1}`, day_number: i+1, xp_value: 25, title: `Day ${i+1}`, description: 'Quest data will appear after seeding the database.', tier: 'beginner' }));
   const questList = (quests && quests.length ? quests : fallbackQuests);
   const completedIds = new Set((completedRows ?? []).map((r:any)=>r.quest_id));
   const completed = questList.filter((q:any)=>completedIds.has(q.id)).length;
-  const totalXp = questList.filter((q:any)=>completedIds.has(q.id)).reduce((sum:number,q:any)=>sum + (q.xp_value ?? 50),0);
+  const totalXp = questList.filter((q:any)=>completedIds.has(q.id)).reduce((sum:number,q:any)=>sum + (q.xp_value ?? 25),0);
   const firstQuest = questList?.[0];
 
   return (
@@ -20,23 +20,23 @@ export default async function Dashboard() {
       <div className="mx-auto max-w-6xl space-y-6">
         <BootcampSummary totalXp={totalXp} completed={completed} total={questList.length} />
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <section className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-6">
           <h2 className="text-2xl font-bold">Start the game</h2>
-          <p className="mt-2 text-slate-300">This course starts from zero and explains each step for beginners.</p>
+          <p className="mt-2 text-slate-300">Your first quest is Day 1: Hello World.</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <a className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950" href={`/quests/${firstQuest?.day_number ?? 1}`}>Start Day 1</a>
-            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/quests">Open quest list</a>
+            <a className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950" href={`/quests/${firstQuest?.day_number ?? 1}`}>Enter Day 1</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/quests">Quest board</a>
           </div>
         </section>
 
         <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <h2 className="text-2xl font-bold">Checkpoint rounds</h2>
-          <p className="mt-2 text-slate-300">Every week ends with a checkpoint challenge. They are intentionally short and beginner-friendly.</p>
+          <p className="mt-2 text-slate-300">These are the boss fights of the bootcamp.</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/1">Open Checkpoint 1</a>
-            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/2">Open Checkpoint 2</a>
-            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/3">Open Checkpoint 3</a>
-            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/4">Open Checkpoint 4</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/1">Checkpoint 1</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/2">Checkpoint 2</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/3">Checkpoint 3</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/4">Checkpoint 4</a>
           </div>
         </section>
 
