@@ -11,7 +11,7 @@ const classTraits: Record<string, { trait: string; bonus: string }> = {
   Fighter: { trait: 'Solid starter', bonus: 'Get a bonus on quests that use simple repetition and practice.' },
   Wizard: { trait: 'Logic focused', bonus: 'Get a bonus on quests that explain patterns, rules, and why things work.' },
   Rogue: { trait: 'Problem solver', bonus: 'Get a bonus on debugging and “find the bug” style quests.' },
-  Cleric: { trait: 'Guide and helper', bonus: 'Get a bonus on quests about reuse, refactoring, and helping code stay organized.' },
+  Cleric: { trait: 'Guide and helper', bonus: 'Get a bonus on quests about reuse, refactoring, and organizing code.' },
 };
 
 export default function CreateCharacterPage() {
@@ -30,7 +30,7 @@ export default function CreateCharacterPage() {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setMessage('Please log in first.'); setLoading(false); return; }
-    const { error } = await supabase.from('profiles').upsert({
+    const payload = {
       id: user.id,
       display_name: name || 'Adventurer',
       race,
@@ -38,7 +38,8 @@ export default function CreateCharacterPage() {
       alignment,
       background,
       level: 1,
-    });
+    };
+    const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' });
     setMessage(error ? error.message : 'Character created.');
     setLoading(false);
     if (!error) router.push('/dashboard');
