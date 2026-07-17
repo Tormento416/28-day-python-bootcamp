@@ -27,6 +27,15 @@ export default async function Dashboard() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h2 className="text-2xl font-bold">Checkpoint rounds</h2>
+          <p className="mt-2 text-slate-300">Every week ends with a checkpoint challenge.</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/1">Open Checkpoint 1</a>
+            <a className="rounded-full border border-white/15 px-5 py-3 font-semibold" href="/checkpoints/2">Open Checkpoint 2</a>
+          </div>
+        </section>
+
         <section className="grid gap-4 md:grid-cols-3">
           {(quests ?? []).slice(0, 3).map((quest:any) => (
             <a key={quest.id} href={`/quests/${quest.day_number}`} className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10">

@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { QuestDetail } from "@/components/QuestDetail";
+import { QuestActions } from "@/components/QuestActions";
+
 export default async function QuestPage({ params }: { params: { day: string } }){
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -7,5 +9,12 @@ export default async function QuestPage({ params }: { params: { day: string } })
   const day = Number(params.day);
   const { data: quest } = await supabase.from('quests').select('*').eq('day_number', day).single();
   const { data: progress } = await supabase.from('user_quests').select('quest_id,status,completed_at,reflection').eq('user_id', user.id).eq('quest_id', quest?.id).maybeSingle();
-  return <main className="min-h-screen p-8"><div className="mx-auto max-w-4xl"><QuestDetail quest={quest} progress={progress} /></div></main>;
+  return (
+    <main className="min-h-screen p-8">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <QuestDetail quest={quest} progress={progress} />
+        <QuestActions questId={quest?.id ?? ""} reflection={progress?.reflection ?? ""} />
+      </div>
+    </main>
+  );
 }
