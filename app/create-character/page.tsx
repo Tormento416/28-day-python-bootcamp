@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 const races = ["Human", "Elf", "Dwarf", "Halfling"];
 const classes = ["Fighter", "Wizard", "Rogue", "Cleric"];
 const alignments = ["Neutral Good", "Lawful Good", "Chaotic Good", "Neutral"];
-const classTraits: Record<string, string> = {
-  Fighter: 'Gains a bonus on simple combat-themed quests.',
-  Wizard: 'Gains a bonus on logic and pattern quests.',
-  Rogue: 'Gains a bonus on debugging and problem-solving quests.',
-  Cleric: 'Gains a bonus on helper and refactor quests.',
+const classTraits: Record<string, { trait: string; bonus: string }> = {
+  Fighter: { trait: 'Solid starter', bonus: 'Get a bonus on quests that use simple repetition and practice.' },
+  Wizard: { trait: 'Logic focused', bonus: 'Get a bonus on quests that explain patterns, rules, and why things work.' },
+  Rogue: { trait: 'Problem solver', bonus: 'Get a bonus on debugging and “find the bug” style quests.' },
+  Cleric: { trait: 'Guide and helper', bonus: 'Get a bonus on quests about reuse, refactoring, and helping code stay organized.' },
 };
 
 export default function CreateCharacterPage() {
@@ -44,6 +44,8 @@ export default function CreateCharacterPage() {
     if (!error) router.push('/dashboard');
   }
 
+  const details = classTraits[className];
+
   return (
     <main className="min-h-screen p-8">
       <div className="mx-auto max-w-3xl rounded-3xl border border-cyan-400/20 bg-white/5 p-6">
@@ -56,7 +58,7 @@ export default function CreateCharacterPage() {
           <label className="space-y-2"><span className="text-sm text-slate-300">Alignment</span><select className="w-full rounded-2xl border border-white/10 bg-slate-950/40 p-3" value={alignment} onChange={e=>setAlignment(e.target.value)}>{alignments.map(a=><option key={a}>{a}</option>)}</select></label>
           <label className="space-y-2 md:col-span-2"><span className="text-sm text-slate-300">Background</span><input className="w-full rounded-2xl border border-white/10 bg-slate-950/40 p-3" value={background} onChange={e=>setBackground(e.target.value)} /></label>
           <div className="md:col-span-2 rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
-            <strong>Class trait:</strong> {classTraits[className]}
+            <strong>{details.trait}:</strong> {details.bonus}
           </div>
           <button disabled={loading} className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">{loading ? 'Saving...' : 'Save character'}</button>
         </form>
