@@ -3,20 +3,20 @@ import { CheckpointForm } from "@/components/CheckpointForm";
 
 const checkpointFallbacks: Record<number, { title: string; questions: any[] }> = {
   1: { title: 'Checkpoint 1', questions: [
-    { id: 'c1q1', prompt: 'What does a variable store in Python?', type: 'mcq', options: ['A file','A value','A loop','A library'], correct_answer: 'A value' },
-    { id: 'c1q2', prompt: 'Which keyword starts a conditional branch?', type: 'mcq', options: ['for','if','def','import'], correct_answer: 'if' },
+    { id: 'c1q1', prompt: 'What does print("Hello") do?', type: 'mcq', options: ['Saves a file','Shows text on screen','Deletes code','Creates a loop'], correct_answer: 'Shows text on screen' },
+    { id: 'c1q2', prompt: 'What is the output of a simple loop?', type: 'mcq', options: ['One time only','Repeated output','A new variable','An error always'], correct_answer: 'Repeated output' },
   ] },
   2: { title: 'Checkpoint 2', questions: [
-    { id: 'c2q1', prompt: 'Which loop is best when you know how many times to repeat?', type: 'mcq', options: ['while','for','try','with'], correct_answer: 'for' },
-    { id: 'c2q2', prompt: 'What structure uses key-value pairs?', type: 'mcq', options: ['list','tuple','dictionary','set'], correct_answer: 'dictionary' },
+    { id: 'c2q1', prompt: 'Which keyword starts an if statement?', type: 'mcq', options: ['for','if','def','import'], correct_answer: 'if' },
+    { id: 'c2q2', prompt: 'What does a variable store?', type: 'mcq', options: ['A value','A loop','A file','A comment'], correct_answer: 'A value' },
   ] },
   3: { title: 'Checkpoint 3', questions: [
-    { id: 'c3q1', prompt: 'What does a function help you do?', type: 'mcq', options: ['Store files','Repeat code','Delete bugs','Rename imports'], correct_answer: 'Repeat code' },
-    { id: 'c3q2', prompt: 'Which block safely handles runtime errors?', type: 'mcq', options: ['if/else','try/except','for/range','class/object'], correct_answer: 'try/except' },
+    { id: 'c3q1', prompt: 'Which loop repeats a fixed number of times?', type: 'mcq', options: ['while','for','try','with'], correct_answer: 'for' },
+    { id: 'c3q2', prompt: 'What does a function help you do?', type: 'mcq', options: ['Repeat code','Delete files','Rename folders','Change colors'], correct_answer: 'Repeat code' },
   ] },
   4: { title: 'Checkpoint 4', questions: [
-    { id: 'c4q1', prompt: 'What does a list comprehension do?', type: 'mcq', options: ['Creates classes','Writes files','Builds a list compactly','Imports modules'], correct_answer: 'Builds a list compactly' },
-    { id: 'c4q2', prompt: 'Why use a class?', type: 'mcq', options: ['To group related data and behavior','To avoid indentation','To rename variables','To speed up loops'], correct_answer: 'To group related data and behavior' },
+    { id: 'c4q1', prompt: 'What should a beginner be able to do by now?', type: 'mcq', options: ['Print, loop, and use if statements','Build a database cluster','Deploy satellites','Write an operating system'], correct_answer: 'Print, loop, and use if statements' },
+    { id: 'c4q2', prompt: 'Why is try/except useful?', type: 'mcq', options: ['It hides all bugs forever','It helps handle errors','It makes code slower','It prints text'], correct_answer: 'It helps handle errors' },
   ] },
 };
 
