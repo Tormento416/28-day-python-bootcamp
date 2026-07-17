@@ -1,12 +1,16 @@
 "use client";
 import { useState } from "react";
 
-export function QuestActions({ questId, reflection }: { questId: string; reflection?: string | null }) {
+export function QuestActions({ questId, reflection, disabled = false }: { questId: string; reflection?: string | null; disabled?: boolean }) {
   const [text, setText] = useState(reflection ?? "");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function save(status: "in_progress" | "completed") {
+    if (disabled) {
+      setMessage("This lesson is using fallback data, so completion cannot be saved yet.");
+      return;
+    }
     setLoading(true);
     setMessage("");
     const res = await fetch("/api/progress", {
@@ -28,13 +32,13 @@ export function QuestActions({ questId, reflection }: { questId: string; reflect
           placeholder="Write a short reflection..."
           className="min-h-32 w-full rounded-2xl border border-white/10 bg-slate-950/40 p-4"
         />
-        <button disabled={loading} onClick={() => save("in_progress")} type="button" className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">
+        <button disabled={loading || disabled} onClick={() => save("in_progress")} type="button" className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">
           {loading ? "Saving..." : "Save reflection"}
         </button>
       </div>
 
       <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
-        <button disabled={loading} onClick={() => save("completed")} type="button" className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">
+        <button disabled={loading || disabled} onClick={() => save("completed")} type="button" className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">
           {loading ? "Saving..." : "Mark complete"}
         </button>
       </div>

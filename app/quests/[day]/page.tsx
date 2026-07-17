@@ -17,14 +17,15 @@ export default async function QuestPage({ params }: { params: { day: string } })
   if (!user) return <main className="min-h-screen p-8"><a href="/auth/login">Login first</a></main>;
   const day = Number(params.day);
   const { data: quest } = await supabase.from('quests').select('*').eq('day_number', day).single();
-  const fallback = { id: `fallback-day-${day}`, day_number: day, title: `Day ${day}`, subtitle: null, description: fallbackDescriptions[day] ?? 'Seed the database to load the full quest details.', tier: 'beginner', xp_value: 25, is_boss: false };
+  const fallback = { id: `fallback-day-${day}`, day_number: day, title: `Day ${day}`, subtitle: null, description: fallbackDescriptions[day] ?? 'Seed the database to load the full quest details.', tier: 'beginner', xp_value: 25, is_boss: false, isFallback: true };
   const displayQuest = quest ?? fallback;
   const { data: progress } = await supabase.from('user_quests').select('quest_id,status,completed_at,reflection').eq('user_id', user.id).eq('quest_id', displayQuest.id).maybeSingle();
   return (
     <main className="min-h-screen p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <QuestDetail quest={displayQuest} progress={progress} />
-        <QuestActions questId={displayQuest.id} reflection={progress?.reflection ?? ""} />
+        <QuestActions questId={displayQuest.id} reflection={progress?.reflection ?? ""} disabled={Boolean((displayQuest as any).isFallback)} />
+        {(displayQuest as any).isFallback && (<p className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">This lesson is showing a fallback version because the real quest has not been loaded from the database yet. The lesson text can still be read, but completion cannot be saved until the real quest record exists in Supabase.</p>)})
         <a className="inline-block rounded-full border border-white/15 px-5 py-3 font-semibold" href="/quests">Back to quest list</a>
       </div>
     </main>
