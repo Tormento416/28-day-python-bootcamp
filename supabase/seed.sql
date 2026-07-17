@@ -1,0 +1,38 @@
+create extension if not exists "pgcrypto";
+
+insert into quests (day_number, title, subtitle, description, tier, xp_value, is_boss) values
+(1, 'Install and cast your first spell', 'Camp setup', 'Set up Python, VS Code, terminal basics, and print statements.', 'basic', 100, false),
+(2, 'Variables and data types', 'Core syntax', 'Strings, integers, floats, booleans, and naming rules.', 'basic', 100, false),
+(3, 'Interact with the player', 'Input/output', 'Use input(), casting, and formatted output.', 'basic', 100, false),
+(4, 'Operators and expressions', 'Math arena', 'Arithmetic, assignment, modulo, comparisons, and precedence.', 'basic', 100, false),
+(5, 'If, elif, else', 'Logic gates', 'Branching logic and truthy thinking.', 'basic', 100, false),
+(6, 'Debugging basics', 'Pattern check', 'Read errors, trace values, and test small chunks.', 'basic', 100, false),
+(7, 'Mini game: number guesser', 'Boss 1', 'Combine input, loops, and conditionals into a full script.', 'boss', 300, true),
+(8, 'While loops', 'Loop lands', 'Repeat actions until a condition changes.', 'loop', 100, false),
+(9, 'For loops and ranges', 'Loop lands', 'Iterate over sequences and count rounds.', 'loop', 100, false),
+(10, 'Lists', 'Containers', 'Create, update, slice, and loop over lists.', 'loop', 100, false),
+(11, 'Dictionaries', 'Containers', 'Store key-value data for flexible state tracking.', 'loop', 100, false),
+(12, 'Tuples and sets', 'Containers', 'Know when data should stay fixed or unique.', 'loop', 100, false),
+(13, 'String methods', 'String forge', 'Clean, split, replace, and search text.', 'loop', 100, false),
+(14, 'Mini game: text adventure', 'Boss 2', 'Build a branching story with inventory and win states.', 'boss', 300, true),
+(15, 'Functions', 'Forge', 'Encapsulate behavior with parameters and returns.', 'functions', 100, false),
+(16, 'Scope and clean code', 'Forge', 'Learn local vs global variables and naming habits.', 'functions', 100, false),
+(17, 'Modules and imports', 'Libraries', 'Use built-ins and split code across files.', 'functions', 100, false),
+(18, 'Errors and exceptions', 'Resilience', 'Use try/except to keep the game alive.', 'functions', 100, false),
+(19, 'Read and write files', 'Files', 'Persist scores, notes, and mission logs.', 'functions', 100, false),
+(20, 'Validation and tiny tests', 'Testing', 'Check outputs and prevent regressions.', 'functions', 100, false),
+(21, 'Project: quiz engine', 'Boss 3', 'Create a multi-question quiz with scoring and replay support.', 'boss', 300, true),
+(22, 'Comprehensions', 'Data path', 'Transform lists and dictionaries in a compact way.', 'capstone', 100, false),
+(23, 'Functions as tools', 'Data path', 'Map, sort, and organize data for insights.', 'capstone', 100, false),
+(24, 'Classes and objects', 'Objects', 'Model players, enemies, and items.', 'capstone', 100, false),
+(25, 'Inheritance and reuse', 'Objects', 'Extend base classes for stronger designs.', 'capstone', 100, false),
+(26, 'Capstone planning', 'Polish', 'Choose a final project and break it into systems.', 'capstone', 100, false),
+(27, 'Capstone build sprint', 'Boss 4', 'Build the final CLI app: tracker, adventure, quiz, or utility tool.', 'boss', 300, true),
+(28, 'Demo, reflect, and ascend', 'Launch day', 'Present the project, review growth, and plan the next 30 days.', 'capstone', 200, false)
+on conflict (day_number) do update set
+  title = excluded.title,
+  subtitle = excluded.subtitle,
+  description = excluded.description,
+  tier = excluded.tier,
+  xp_value = excluded.xp_value,
+  is_boss = excluded.is_boss;
