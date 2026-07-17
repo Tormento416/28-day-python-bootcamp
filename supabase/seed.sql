@@ -1,7 +1,7 @@
 create extension if not exists "pgcrypto";
 
 insert into quests (day_number, title, subtitle, description, tier, xp_value, is_boss) values
-(1, 'Hello, World!', 'Your first Python spell', 'Print Hello World and learn how to run a Python script.', 'beginner', 25, false),
+(1, 'Hello, World!', 'Start here', 'Learn what Python is, how to open the editor, and print your first message: Hello World.', 'beginner', 25, false),
 (2, 'Simple print statements', 'Show text on screen', 'Use print() to display a few messages.', 'beginner', 25, false),
 (3, 'Variables', 'Store values', 'Save a name, age, or favorite color in a variable.', 'beginner', 25, false),
 (4, 'Input basics', 'Talk to the user', 'Ask the user for their name and print it back.', 'beginner', 25, false),
