@@ -7,6 +7,12 @@ import { useRouter } from "next/navigation";
 const races = ["Human", "Elf", "Dwarf", "Halfling"];
 const classes = ["Fighter", "Wizard", "Rogue", "Cleric"];
 const alignments = ["Neutral Good", "Lawful Good", "Chaotic Good", "Neutral"];
+const classTraits: Record<string, string> = {
+  Fighter: 'Gains a bonus on simple combat-themed quests.',
+  Wizard: 'Gains a bonus on logic and pattern quests.',
+  Rogue: 'Gains a bonus on debugging and problem-solving quests.',
+  Cleric: 'Gains a bonus on helper and refactor quests.',
+};
 
 export default function CreateCharacterPage() {
   const [name, setName] = useState("");
@@ -49,6 +55,9 @@ export default function CreateCharacterPage() {
           <label className="space-y-2"><span className="text-sm text-slate-300">Class</span><select className="w-full rounded-2xl border border-white/10 bg-slate-950/40 p-3" value={className} onChange={e=>setClassName(e.target.value)}>{classes.map(c=><option key={c}>{c}</option>)}</select></label>
           <label className="space-y-2"><span className="text-sm text-slate-300">Alignment</span><select className="w-full rounded-2xl border border-white/10 bg-slate-950/40 p-3" value={alignment} onChange={e=>setAlignment(e.target.value)}>{alignments.map(a=><option key={a}>{a}</option>)}</select></label>
           <label className="space-y-2 md:col-span-2"><span className="text-sm text-slate-300">Background</span><input className="w-full rounded-2xl border border-white/10 bg-slate-950/40 p-3" value={background} onChange={e=>setBackground(e.target.value)} /></label>
+          <div className="md:col-span-2 rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
+            <strong>Class trait:</strong> {classTraits[className]}
+          </div>
           <button disabled={loading} className="rounded-full bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">{loading ? 'Saving...' : 'Save character'}</button>
         </form>
         {message && <p className="mt-4 text-sm text-slate-300">{message}</p>}
