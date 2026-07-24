@@ -1,10 +1,10 @@
 # 🐲 Pythonia: 28-Day Gamified RPG Python Training Bootcamp
 
-> **Learn Python from scratch to advanced frameworks in a 28-day D&D/RPG video game adventure powered by WebAssembly and MongoDB Atlas.**
+> **Learn Python from scratch to advanced frameworks in a 28-day D&D/RPG video game adventure powered by WebAssembly, offline desktop support, and MongoDB Atlas.**
 
 ![Pythonia Banner](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-14.2-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Electron](https://img.shields.io/badge/Electron-29.3-47A248?style=for-the-badge&logo=electron&logoColor=white)
 ![Pyodide](https://img.shields.io/badge/Pyodide-WASM-FF6F00?style=for-the-badge&logo=webassembly&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
@@ -14,7 +14,7 @@
 
 **Pythonia** transforms the process of learning Python into an interactive fantasy RPG video game. Choose your hero archetype on Day 1, embark on daily side quests, battle daily Mini-Bosses, and conquer multi-phase Weekly Epic Boss Dungeons every 7 days!
 
-All Python code is executed **100% in-browser** using client-side **Pyodide WebAssembly**, providing zero-latency execution, real-time stdout capture, and automated test grading.
+All Python code is executed **100% in-browser / in-app** using client-side **Pyodide WebAssembly**, providing zero-latency execution, real-time stdout capture, and automated test grading without needing external compilers.
 
 ---
 
@@ -37,14 +37,32 @@ Select your archetype on Day 1 to tailor quest storylines, code examples, starte
 ### 🐲 Weekly Epic Boss Dungeons (Days 7, 14, 21, 28)
 - Every 7 days, there are **no side quests**. Instead, players enter a multi-phase **Weekly Epic Boss Dungeon** with animated boss health bars, phase damage mechanics, and trophy badges (**+500 XP / +1000 XP**).
 
-### ⚡ Client-Side WebAssembly Sandbox
-- Safe, instant execution using Pyodide (Python 3.11 compiled to WASM).
-- Real-time `stdout`/`stderr` terminal output.
-- Automated unit test assertion verification.
+### 🖥️ Standalone Portable Desktop App (.exe & .dmg)
+- Playable 100% **offline without Wi-Fi** using Electron desktop packaging.
+- Portable `.exe` for Windows and `.dmg` for macOS.
 
-### 💾 Persistent MongoDB Atlas Save & Resume
-- Automatically saves progress (active day, completed sub-quests, code submissions, XP, level, gear).
-- Players can pause anytime and return on any device to pick up right where they left off.
+---
+
+## 🖥️ Building Portable Desktop Executables (.exe & .dmg)
+
+You can package **Pythonia** into a standalone portable Desktop Application that runs 100% offline without requiring Wi-Fi or server deployment:
+
+### Windows (.exe Portable & Installer)
+```bash
+npm run dist:win
+```
+*Outputs standalone `dist/Pythonia 28-Day RPG Bootcamp 1.0.0.exe` in the `dist/` directory.*
+
+### macOS (.dmg & Portable Zip)
+```bash
+npm run dist:mac
+```
+*Outputs `dist/Pythonia 28-Day RPG Bootcamp-1.0.0.dmg` in the `dist/` directory.*
+
+### Cross-Platform Build
+```bash
+npm run dist
+```
 
 ---
 
@@ -88,55 +106,29 @@ Select your archetype on Day 1 to tailor quest storylines, code examples, starte
 
 ---
 
-## 💻 Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS
-- **Database**: MongoDB Atlas (`mongodb` driver)
-- **Python Execution Engine**: Pyodide (WebAssembly client-side sandbox)
-- **Design & Styling**: Dark mode, glassmorphism, responsive grid layouts, Google Fonts (Outfit & JetBrains Mono)
-
----
-
-## 🛠️ Quick Start & Installation Guide
+## 🛠️ Quick Start (Web Server Mode)
 
 ### Prerequisites
 - Node.js 18+ installed
-- A MongoDB database (or MongoDB Atlas cluster)
 
-### 1. Clone the Repository
+### 1. Clone & Install
 ```bash
 git clone https://github.com/Tormento416/28-day-python-bootcamp.git
 cd 28-day-python-bootcamp
-```
-
-### 2. Install Dependencies
-```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
-Create a `.env.local` file in the root directory:
+### 2. Configure Environment & Seed DB
+Create `.env.local`:
 ```env
-MONGODB_URI="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/python_bootcamp?retryWrites=true&w=majority"
+MONGODB_URI="mongodb+srv://<user>:<password>@<cluster>.mongodb.net/python_bootcamp?retryWrites=true&w=majority"
 MONGODB_DB="python_bootcamp"
 ```
-
-### 4. Seed the MongoDB Database
-Start the development server and trigger the database seed endpoint:
+Run dev server & seed MongoDB:
 ```bash
 npm run dev
-```
-Open your browser or run in terminal:
-```bash
 curl http://localhost:3000/api/seed
 ```
-*Output: `{"success":true,"message":"Seeded 28 daily quests and 4 weekly epic bosses into MongoDB."}`*
-
-### 5. Launch Pythonia!
-Navigate to `http://localhost:3000` in your web browser:
-1. Register a new hero account at `/auth/signup`.
-2. Select your Day 1 Character Archetype.
-3. Complete Day 1 side quests and defeat the *Goblin Scribe*!
 
 ---
 
@@ -144,32 +136,15 @@ Navigate to `http://localhost:3000` in your web browser:
 
 ```
 28-day-python-bootcamp/
-├── app/
-│   ├── actions/          # Server actions
-│   ├── api/              # MongoDB API routes (/auth, /profile, /quests, /progress, /seed)
-│   ├── auth/             # Login & Signup pages
-│   ├── boss/[week]/      # Multi-phase Weekly Epic Boss Battlegrounds
-│   ├── create-character/ # Day 1 Character Archetype Selection page
-│   ├── dashboard/        # RPG Hero Dashboard & Character Sheet
-│   ├── quests/[day]/     # Daily Quest Hub & Sub-Quest Stepper
-│   ├── quests/           # 28-Day Campaign Quest Map
-│   ├── globals.css       # Global styles & font imports
-│   ├── layout.tsx        # Root layout with Pyodide WASM loader & Navbar
-│   └── page.tsx          # Landing page & Archetype showcase
-├── components/
-│   ├── ArchetypeSelector.tsx # Day 1 Archetype choice modal
-│   ├── BossFight.tsx         # Animated RPG Boss combat window
-│   ├── BootcampSummary.tsx   # Character XP progress bar & trophy case
-│   ├── CodeEditor.tsx        # Pyodide WASM Python editor & test checker
-│   ├── Navbar.tsx            # Navigation bar with user status
-│   └── SubQuestStepper.tsx   # Daily side quest stepper & mini-boss trigger
+├── app/                  # Next.js App Router pages & API routes
+├── components/           # RPG Combat, CodeEditor, Steppers, Character Sheet
+├── electron/
+│   ├── main.js           # Electron main desktop process script
+│   └── preload.js        # IPC preload bridge
 ├── lib/
-│   ├── db/
-│   │   ├── models.ts     # MongoDB schemas & Archetype definitions
-│   │   ├── mongodb.ts    # MongoDB connection client helper
-│   │   └── seedData.ts   # Complete 28-day curriculum & boss data
-│   └── pyodide.ts        # Pyodide WebAssembly Python execution engine
-├── package.json
+│   ├── db/               # MongoDB models & seed data
+│   └── pyodide.ts        # Pyodide WebAssembly Python engine
+├── package.json          # Electron & desktop builder scripts
 └── README.md
 ```
 

@@ -27,9 +27,13 @@ export async function loadPyodideInstance(): Promise<any> {
     return pyodidePromise;
   }
 
+  const indexURL = typeof window !== "undefined" && (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/"
+    : "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/";
+
   pyodidePromise = new Promise((resolve, reject) => {
     if (window.loadPyodide) {
-      window.loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/" })
+      window.loadPyodide({ indexURL })
         .then((pyodide: any) => {
           window.pyodide = pyodide;
           resolve(pyodide);
@@ -42,7 +46,7 @@ export async function loadPyodideInstance(): Promise<any> {
     script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js";
     script.onload = () => {
       if (window.loadPyodide) {
-        window.loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/" })
+        window.loadPyodide({ indexURL })
           .then((pyodide: any) => {
             window.pyodide = pyodide;
             resolve(pyodide);
