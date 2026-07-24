@@ -10,6 +10,8 @@
 
 ---
 
+You can play https://adventuresinpythonia.vercel.app/
+
 ## 🌟 Overview
 
 **Pythonia** transforms the process of learning Python into an interactive fantasy RPG video game. Choose your hero archetype on Day 1, embark on daily side quests, battle daily Mini-Bosses, and conquer multi-phase Weekly Epic Boss Dungeons every 7 days!
