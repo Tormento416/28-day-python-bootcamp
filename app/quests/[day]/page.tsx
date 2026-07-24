@@ -1,32 +1,180 @@
-import { createClient } from "@/lib/supabase/server";
-import { QuestDetail } from "@/components/QuestDetail";
-import { QuestActions } from "@/components/QuestActions";
+"use client";
 
-const fallbackDescriptions: Record<number, string> = {
-  1: 'Python is an interpreted language. That means it does not wait until the entire program is finished before doing work. Instead, it reads and executes code line by line, in the order you wrote it. Order matters, because a later line can only use values that were created earlier. The first tool we learn is print. print is the simplest way to tell Python to display something on the screen, but it is much more important than it first appears. Programmers use print to confirm what a script is doing, to check the result of a calculation, to display the state of an object, or to show whether a task finished successfully. For example, a script might say Finished when everything worked, or Unfinished when it did not. Today your job is to write a program that prints Hello World so you can see the full loop from code to output.',
-  2: 'Print is not only for showing a message to a person. It is one of the easiest ways to inspect what your program knows at a moment in time. If a variable has the wrong value, print can reveal it. If a function returned something unexpected, print can help you find out where the problem started. This lesson expands on that idea by having you print several messages and observe how output changes with each line.',
-  3: 'A variable gives a name to a value. That matters because code becomes much easier to read when you can say player_name instead of repeating the same text everywhere. Variables also let programs change over time. A score can start at 0, increase after each correct answer, and then be shown at the end. In this quest, you will practice assigning values and reusing them so the idea becomes natural.',
-  4: 'Programs become interactive when they can respond to the person using them. input pauses the program and waits for typed text, then returns that text so your code can use it. This is how you ask questions, collect names, get choices, and build conversations. In game terms, input is how the code hears the player. Today you will use it to let your program react to what someone types.',
-  5: 'Numbers are the building blocks of calculations. Python can add, subtract, multiply, divide, and compare them, but it does so as real data, not as text. That difference matters because a score should act like a number, not a string of characters. If you accidentally treat numbers like text, the program behaves differently. This lesson helps you see why numeric types are separate and how that powers counters, totals, and game logic.',
-  6: 'Strings are sequences of characters, and they are how Python represents words, sentences, names, and dialogue. They are essential because most user-facing parts of a program are text. You will learn how strings are created, combined, and displayed, and why text handling becomes important in menus, prompts, and character creation. By the end of this quest, strings should feel like the language your program uses to speak.'
-};
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { SubQuestStepper } from "@/components/SubQuestStepper";
+import { DAILY_QUESTS_SEED } from "@/lib/db/seedData";
+import { Quest } from "@/lib/db/models";
 
-export default async function QuestPage({ params }: { params: { day: string } }){
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return <main className="min-h-screen p-8"><a href="/auth/login">Login first</a></main>;
-  const day = Number(params.day);
-  const { data: quest } = await supabase.from('quests').select('*').eq('day_number', day).single();
-  const fallback = { id: `fallback-day-${day}`, day_number: day, title: `Day ${day}`, subtitle: null, description: fallbackDescriptions[day] ?? 'Seed the database to load the full quest details.', tier: 'beginner', xp_value: 25, is_boss: false, isFallback: true };
-  const displayQuest = quest ?? fallback;
-  const { data: progress } = await supabase.from('user_quests').select('quest_id,status,completed_at,reflection').eq('user_id', user.id).eq('quest_id', displayQuest.id).maybeSingle();
+export default function DailyQuestPage({ params }: { params: { day: string } }) {
+  const dayNum = Number(params.day);
+  const router = useRouter();
+
+  const [user, setUser] = useState<any>(null);
+  const [quest, setQuest] = useState<Quest | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // If Day 7, 14, 21, or 28 -> redirect to Weekly Boss page
+    if (dayNum % 7 === 0) {
+      router.push(`/boss/${dayNum / 7}`);
+      return;
+    }
+
+    const cached = localStorage.getItem("py_hero_user");
+    if (cached) {
+      try {
+        setUser(JSON.parse(cached));
+      } catch (e) {}
+    }
+
+    // Load quest details from API or seed data
+    fetch(`/api/quests?day=${dayNum}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.quest) {
+          setQuest(data.quest);
+        } else {
+          const fallback = DAILY_QUESTS_SEED.find((q) => q.dayNumber === dayNum);
+          setQuest(fallback || null);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        const fallback = DAILY_QUESTS_SEED.find((q) => q.dayNumber === dayNum);
+        setQuest(fallback || null);
+        setLoading(false);
+      });
+  }, [dayNum, router]);
+
+  async function handleCompleteSubQuest(subQuestId: string, userCode: string) {
+    if (!user) return;
+
+    const userId = user.id || user._id;
+    try {
+      const res = await fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          type: "subquest",
+          subQuestId,
+          userCode,
+          xpEarned: 50
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const updatedUser = {
+          ...user,
+          xp: data.xp,
+          level: data.level,
+          completedSubQuestIds: data.completedSubQuestIds
+        };
+        setUser(updatedUser);
+        localStorage.setItem("py_hero_user", JSON.stringify(updatedUser));
+      }
+    } catch (e) {}
+  }
+
+  async function handleCompleteMiniBoss(userCode: string) {
+    if (!user || !quest?.miniBoss) return;
+
+    const userId = user.id || user._id;
+    try {
+      const res = await fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          type: "miniboss",
+          dayNumber: dayNum,
+          userCode,
+          xpEarned: 150,
+          lootEarned: quest.miniBoss.lootReward
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const updatedUser = {
+          ...user,
+          xp: data.xp,
+          level: data.level,
+          currentDay: data.currentDay,
+          completedMiniBossDays: data.completedMiniBossDays,
+          lootInventory: data.lootInventory
+        };
+        setUser(updatedUser);
+        localStorage.setItem("py_hero_user", JSON.stringify(updatedUser));
+      }
+    } catch (e) {}
+  }
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center p-8">
+        <p className="text-sm font-semibold text-cyan-300 animate-pulse">Loading Day {dayNum} Quests...</p>
+      </main>
+    );
+  }
+
+  if (!quest) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-8 text-center">
+        <h1 className="text-3xl font-bold text-white">Day {dayNum} Quest Not Found</h1>
+        <p className="mt-2 text-sm text-slate-400">Return to the quest board to select a valid day.</p>
+        <a href="/quests" className="mt-6 rounded-full bg-cyan-400 px-6 py-2.5 text-xs font-bold text-slate-950">
+          Back to Quest Board
+        </a>
+      </main>
+    );
+  }
+
+  const completedSubQuestIds = user?.completedSubQuestIds || [];
+  const completedMiniBoss = (user?.completedMiniBossDays || []).includes(dayNum);
+
   return (
-    <main className="min-h-screen p-8">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <QuestDetail quest={displayQuest} progress={progress} />
-        <QuestActions questId={displayQuest.id} reflection={progress?.reflection ?? ""} disabled={Boolean((displayQuest as any).isFallback)} />
-        {(displayQuest as any).isFallback && (<p className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">This lesson is showing a fallback version because the real quest has not been loaded from the database yet. The lesson text can still be read, but completion cannot be saved until the real quest record exists in Supabase.</p>)})
-        <a className="inline-block rounded-full border border-white/15 px-5 py-3 font-semibold" href="/quests">Back to quest list</a>
+    <main className="min-h-screen p-6 sm:p-10">
+      <div className="mx-auto max-w-5xl space-y-6">
+        {/* Quest Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-cyan-500/20 bg-slate-900/60 p-6 backdrop-blur-xl">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-cyan-400 px-3 py-1 text-xs font-black text-slate-950">
+                DAY {quest.dayNumber}
+              </span>
+              <span className="text-xs font-bold text-slate-400">{quest.category}</span>
+            </div>
+            <h1 className="mt-2 text-3xl font-black text-white">{quest.title}</h1>
+            <p className="text-xs font-semibold text-cyan-300">{quest.subtitle}</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="/quests"
+              className="rounded-full border border-slate-700 bg-slate-950 px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-slate-900 transition"
+            >
+              Quest Map
+            </a>
+            {dayNum < 28 && (
+              <a
+                href={`/quests/${dayNum + 1}`}
+                className="rounded-full bg-cyan-400 px-5 py-2.5 text-xs font-extrabold text-slate-950 shadow-md shadow-cyan-400/20 hover:bg-cyan-300 transition"
+              >
+                Next Day →
+              </a>
+            )}
+          </div>
+        </div>
+
+        {/* SubQuest Stepper */}
+        <SubQuestStepper
+          quest={quest}
+          completedSubQuestIds={completedSubQuestIds}
+          completedMiniBoss={completedMiniBoss}
+          onCompleteSubQuest={handleCompleteSubQuest}
+          onCompleteMiniBoss={handleCompleteMiniBoss}
+        />
       </div>
     </main>
   );

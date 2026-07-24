@@ -1,63 +1,56 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    if (mode === "login") {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      setMessage(error ? error.message : "Signed in.");
-      if (!error) router.push("/dashboard");
-      router.refresh();
+    const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/signup";
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, displayName: displayName || username })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error || "Authentication failed.");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("py_hero_user", JSON.stringify(data.user));
+      setMessage(mode === "login" ? "Logged in successfully!" : "Hero account created!");
       setLoading(false);
-      return;
-    }
 
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectTo,
-        data: { display_name: displayName },
-      },
-    });
-
-    if (error) {
-      setMessage(error.message);
+      if (mode === "signup") {
+        router.push("/create-character");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      setMessage(err.message || "Network error.");
       setLoading(false);
-      return;
     }
-
-    const userId = data.user?.id;
-    if (userId && displayName) {
-      await supabase.from("profiles").upsert({ id: userId, display_name: displayName });
-    }
-
-    setMessage("Account created. Check your email to confirm your registration, then log in.");
-    setLoading(false);
-    router.refresh();
   }
 
   return (
     <form onSubmit={onSubmit} className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6">
       {mode === "signup" && (
         <input
-          className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3"
+          className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-white"
           placeholder="Display name"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
@@ -66,15 +59,15 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         />
       )}
       <input
-        className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        type="email"
+        className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-white"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        type="text"
         required
       />
       <input
-        className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3"
+        className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-white"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}

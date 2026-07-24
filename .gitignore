@@ -1,3 +1,5 @@
-.env.local
+.env*
+atlas-credentials.env
 .next
 node_modules
+completed_tasks.txt
