@@ -22,12 +22,19 @@ export default function LandingPage() {
           Step into Pythonia! Choose your specialization archetype on Day 1, complete 2-3 daily side quests, defeat daily Mini-Bosses, and conquer epic Weekly Boss Dungeons.
         </p>
 
+        {/* Hero Action Buttons */}
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
             href="/auth/signup"
             className="rounded-full bg-gradient-to-r from-cyan-400 to-indigo-500 px-8 py-4 text-base font-extrabold text-slate-950 shadow-xl shadow-cyan-400/30 transition hover:scale-105"
           >
             Create Hero & Begin Day 1
+          </a>
+          <a
+            href="#download-section"
+            className="flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-950/40 px-8 py-4 text-base font-extrabold text-cyan-300 hover:bg-cyan-900/60 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 transition hover:scale-105"
+          >
+            <span>💻 Download Desktop App (.exe / .dmg)</span>
           </a>
           <a
             href="/auth/login"
@@ -59,6 +66,53 @@ export default function LandingPage() {
             <p className="mt-1 text-xs text-slate-400">
               Every 7 days, no side quests! Battle multi-phase epic Weekly Bosses (Days 7, 14, 21, 28) for trophy badges.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Download Desktop Application Banner */}
+      <section id="download-section" className="mx-auto max-w-6xl px-6 pb-16 scroll-mt-20">
+        <div className="rounded-3xl border border-cyan-500/40 bg-gradient-to-br from-cyan-950/60 via-slate-900 to-slate-950 p-8 shadow-2xl backdrop-blur-xl md:p-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-3 text-center md:text-left">
+              <span className="inline-block rounded-full bg-cyan-400 px-3 py-1 text-xs font-black text-slate-950 uppercase tracking-wider">
+                100% OFFLINE PLAYABLE • NO WI-FI NEEDED
+              </span>
+              <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
+                Download Pythonia Desktop Edition
+              </h2>
+              <p className="max-w-xl text-sm text-slate-300 leading-relaxed">
+                Get the standalone portable game executable for Windows or macOS. Play the full 28-day RPG campaign anywhere without requiring an internet connection!
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+              <a
+                href="https://github.com/Tormento416/AdventuresInPythonia/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-3 rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black text-slate-950 shadow-lg shadow-cyan-400/30 transition hover:bg-cyan-300 hover:scale-105"
+              >
+                <span className="text-xl">🪟</span>
+                <div className="text-left">
+                  <div className="leading-tight">Download for Windows</div>
+                  <div className="text-[10px] font-bold text-slate-800">Portable .EXE (64-bit)</div>
+                </div>
+              </a>
+
+              <a
+                href="https://github.com/Tormento416/AdventuresInPythonia/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-3 rounded-2xl border border-cyan-400/40 bg-slate-900 px-6 py-4 text-sm font-black text-white shadow-lg transition hover:bg-slate-800 hover:border-cyan-400 hover:scale-105"
+              >
+                <span className="text-xl">🍎</span>
+                <div className="text-left">
+                  <div className="leading-tight">Download for macOS</div>
+                  <div className="text-[10px] font-bold text-cyan-300">Standalone .DMG</div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </section>
